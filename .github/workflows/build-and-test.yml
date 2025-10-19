@@ -4,6 +4,8 @@ on:
     branches:
       - main
   pull_request:
+  schedule:
+    - cron: "0 5 1 * *"
 
 name: Build and Test
 jobs:
@@ -41,3 +43,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           # SONAR_TOKEN: ${{ secrets.SELFHOSTED_SONAR_TOKEN }}
           # SONAR_HOST_URL: ${{ secrets.SELFHOSTED_SONAR_HOST_URL }}
+
