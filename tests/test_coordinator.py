@@ -14,7 +14,7 @@ from . import (
     EGN_VALID,
     GOV_ID_VALID,
     LICENSE_VALID,
-    PersonalDocumentType,
+    PersonalIdentificationType,
     PersonType,
 )
 
@@ -39,9 +39,9 @@ async def test_coordinator_setup_ok_individual(
     assert coordinator
     assert coordinator.client.person_type == PersonType.INDIVIDUAL
     assert coordinator.client.person_egn == EGN_VALID
-    assert coordinator.client.person_document_number == LICENSE_VALID
+    assert coordinator.client.person_identifier == LICENSE_VALID
     assert (
-        coordinator.client.person_document_type == PersonalDocumentType.DRIVING_LICENSE
+        coordinator.client.person_identifier_type == PersonalIdentificationType.DRIVING_LICENSE
     )
     assert coordinator.client.bulstat is None
 
@@ -69,7 +69,7 @@ async def test_coordinator_setup_ok_business(
     assert coordinator
     assert coordinator.client.person_type == PersonType.BUSINESS
     assert coordinator.client.person_egn == EGN_VALID
-    assert coordinator.client.person_document_number == GOV_ID_VALID
+    assert coordinator.client.person_identifier == GOV_ID_VALID
     assert coordinator.client.bulstat == BULSTAT_VALID
 
     assert coordinator.client.get_obligations.call_count == 1

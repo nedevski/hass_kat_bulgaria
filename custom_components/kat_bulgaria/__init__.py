@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 
-from kat_bulgaria.data_models import PersonalDocumentType
+from kat_bulgaria.data_models import PersonalIdentificationType
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -69,7 +69,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         new_data[CONF_PERSON_NAME] = old_data[CONF_PERSON_NAME]
         new_data[CONF_PERSON_EGN] = old_data[CONF_PERSON_EGN]
         new_data[CONF_DOCUMENT_NUMBER] = old_data[CONF_DRIVING_LICENSE]
-        new_data[CONF_DOCUMENT_TYPE] = PersonalDocumentType.DRIVING_LICENSE
+        new_data[CONF_DOCUMENT_TYPE] = PersonalIdentificationType.DRIVING_LICENSE
 
         hass.config_entries.async_update_entry(
             config_entry, unique_id=config_entry.unique_id, data=new_data, version=2

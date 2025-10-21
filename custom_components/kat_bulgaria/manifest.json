@@ -3,9 +3,9 @@
   "name": "KAT Bulgaria",
   "codeowners": ["@Nedevski"],
   "config_flow": true,
-  "documentation": "https://github.com/Nedevski/hacs_kat_bulgaria",
+  "documentation": "https://github.com/Nedevski/hass_kat_bulgaria",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/Nedevski/hacs_kat_bulgaria/issues",
-  "requirements": ["kat_bulgaria==3.0.0"],
-  "version": "2.0.0"
+  "issue_tracker": "https://github.com/Nedevski/hass_kat_bulgaria/issues",
+  "requirements": ["kat_bulgaria==3.2.0"],
+  "version": "2.1.0b7"
 }

@@ -3,13 +3,14 @@
     "abort": {
       "already_configured": "Device is already configured.",
       "cannot_connect": "KAT's website is down, try again.",
-      "invalid_config": "Invalid EGN or Driver License Number.",
+      "invalid_config": "Invalid config - EGN or identification number.",
       "reconfigure_successful": "Reconfiguration successful.",
       "unknown": "Unknown error, check the logs for more details."
     },
     "error": {
       "cannot_connect": "KAT's website is down, try again.",
-      "invalid_config": "Invalid EGN or Driver License Number.",
+      "invalid_config": "Invalid EGN or identification number.",
+      "invalid_config_car_plate_number": "Invalid car plate number. Use only English capital letters or numbers, no intervals.",
       "unknown": "Unknown error, check the logs for more details."
     },
     "step": {
@@ -24,8 +25,8 @@
       },
       "individual": {
         "data": {
-          "document_number": "Document Number",
-          "document_type": "Document Type",
+          "document_number": "Identification Number",
+          "document_type": "Identification Type",
           "egn": "Unified Civil Number (EGN)",
           "person_name": "Person name"
         },
@@ -33,10 +34,10 @@
       },
       "reconfigure": {
         "data": {
-          "document_number": "Document Number",
-          "document_type": "Document Type"
+          "document_number": "Identification Number",
+          "document_type": "Identification Type"
         },
-        "title": "Update document information"
+        "title": "Update identification information"
       },
       "user": {
         "menu_options": {
@@ -83,7 +84,8 @@
     "document_type": {
       "options": {
         "national_id": "National ID",
-        "driving_license": "Driving License"
+        "driving_license": "Driving License",
+        "car_plate_num": "Car Plate Number"
       }
     }
   }

@@ -16,8 +16,8 @@ class KatClient:
 
     person_type: str
     person_egn: str
-    person_document_number: str
-    person_document_type: str | None
+    person_identifier: str
+    person_identifier_type: str | None
     bulstat: str | None
 
     def __init__(
@@ -25,7 +25,7 @@ class KatClient:
         hass: HomeAssistant,
         person_type: str,
         egn: str,
-        document_number: str,
+        identifier_str: str,
         document_type: str | None,
         bulstat: str | None,
     ) -> None:
@@ -37,15 +37,16 @@ class KatClient:
 
         self.person_type = person_type
         self.person_egn = egn
-        self.person_document_number = document_number
-        self.person_document_type = None
+        self.person_identifier = identifier_str
+        self.person_identifier_type = None
         self.bulstat = None
 
         if self.person_type == PersonType.INDIVIDUAL:
             if document_type is None:
-                raise ValueError("Document type is required for individual type")
+                raise ValueError(
+                    "Document type is required for individual type")
 
-            self.person_document_type = document_type
+            self.person_identifier_type = document_type
 
         if self.person_type == PersonType.BUSINESS:
             if bulstat is None:
@@ -67,9 +68,9 @@ class KatClient:
         """Get obligations."""
         if self.person_type == PersonType.BUSINESS:
             return await self.api.get_obligations_business(
-                self.person_egn, self.person_document_number, self.bulstat
+                self.person_egn, self.person_identifier, self.bulstat
             )
 
         return await self.api.get_obligations_individual(
-            self.person_egn, self.person_document_type, self.person_document_number
+            self.person_egn, self.person_identifier_type, self.person_identifier
         )

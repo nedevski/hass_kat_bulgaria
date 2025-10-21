@@ -5,8 +5,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from kat_bulgaria.data_models import PersonalDocumentType
-from kat_bulgaria.errors import KatError, KatErrorType
+from kat_bulgaria.data_models import PersonalIdentificationType
+from kat_bulgaria.errors import KatError, KatErrorSubtype, KatErrorType
 import voluptuous as vol
 
 from homeassistant import config_entries
@@ -32,12 +32,13 @@ SCHEMA_INDIVIDUAL = vol.Schema(
         vol.Required(CONF_PERSON_NAME): str,
         vol.Required(CONF_PERSON_EGN): str,
         vol.Required(
-            CONF_DOCUMENT_TYPE, default=PersonalDocumentType.NATIONAL_ID
+            CONF_DOCUMENT_TYPE, default=PersonalIdentificationType.NATIONAL_ID
         ): SelectSelector(
             SelectSelectorConfig(
                 options=[
-                    PersonalDocumentType.NATIONAL_ID,
-                    PersonalDocumentType.DRIVING_LICENSE,
+                    PersonalIdentificationType.NATIONAL_ID,
+                    PersonalIdentificationType.DRIVING_LICENSE,
+                    PersonalIdentificationType.CAR_PLATE_NUM,
                 ],
                 translation_key=CONF_DOCUMENT_TYPE,
             )
@@ -89,8 +90,8 @@ class ConfigFlowHandler(ConfigFlow, domain=DOMAIN):
         # Init user input values & init KatClient
         user_name = user_input[CONF_PERSON_NAME]
         user_egn = user_input[CONF_PERSON_EGN]
-        user_document_type = user_input[CONF_DOCUMENT_TYPE]
-        user_license_number = user_input[CONF_DOCUMENT_NUMBER]
+        user_identifier_type = user_input[CONF_DOCUMENT_TYPE]
+        user_identifier = user_input[CONF_DOCUMENT_NUMBER]
 
         user_input[CONF_PERSON_TYPE] = PersonType.INDIVIDUAL
 
@@ -98,8 +99,8 @@ class ConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             self.hass,
             PersonType.INDIVIDUAL,
             user_egn,
-            user_license_number,
-            user_document_type,
+            user_identifier,
+            user_identifier_type,
             None,
         )
 
@@ -112,8 +113,12 @@ class ConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                 errors=errors,
             )
 
-        # If this person (EGN) is already configured, abort
-        await self.async_set_unique_id(user_egn)
+        unique_id = user_egn
+        if user_identifier_type == PersonalIdentificationType.CAR_PLATE_NUM:
+            unique_id = user_identifier
+
+        # If this entity is already configured, abort
+        await self.async_set_unique_id(unique_id)
         self._abort_if_unique_id_configured()
 
         return self.async_create_entry(title=f"KAT - {user_name}", data=user_input)
@@ -193,13 +198,14 @@ class ConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                 vol.Required(
                     CONF_DOCUMENT_TYPE,
                     default=reconfigure_entry.data.get(
-                        CONF_DOCUMENT_TYPE, PersonalDocumentType.NATIONAL_ID
+                        CONF_DOCUMENT_TYPE, PersonalIdentificationType.NATIONAL_ID
                     ),
                 ): SelectSelector(
                     SelectSelectorConfig(
                         options=[
-                            PersonalDocumentType.NATIONAL_ID,
-                            PersonalDocumentType.DRIVING_LICENSE,
+                            PersonalIdentificationType.NATIONAL_ID,
+                            PersonalIdentificationType.DRIVING_LICENSE,
+                            PersonalIdentificationType.CAR_PLATE_NUM,
                         ],
                         translation_key=CONF_DOCUMENT_TYPE,
                     )
@@ -303,7 +309,19 @@ class ConfigFlowHandler(ConfigFlow, domain=DOMAIN):
         try:
             await kat_client.validate_credentials()
         except KatError as err:
-            if err.error_type == KatErrorType.VALIDATION_ERROR:
+            if (
+                err.error_type == KatErrorType.VALIDATION_ERROR
+                and err.error_subtype
+                == KatErrorSubtype.VALIDATION_CAR_PLATE_NUMBER_INVALID
+            ):
+                _LOGGER.warning(
+                    "Invalid credentials, unable to setup: %s - %s",
+                    err.error_type,
+                    err.error_subtype,
+                )
+                errors["base"] = "invalid_config_car_plate_number"
+
+            elif err.error_type == KatErrorType.VALIDATION_ERROR:
                 _LOGGER.warning(
                     "Invalid credentials, unable to setup: %s - %s",
                     err.error_type,
@@ -311,7 +329,7 @@ class ConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                 )
                 errors["base"] = "invalid_config"
 
-            if err.error_type == KatErrorType.API_ERROR:
+            elif err.error_type == KatErrorType.API_ERROR:
                 _LOGGER.warning(
                     "KAT API down, unable to setup: %s - %s",
                     err.error_type,
