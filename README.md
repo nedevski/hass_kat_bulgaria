@@ -87,7 +87,7 @@ For each configured instance, a couple of entities are created and updated every
 - Count Total ([sensor, int](https://www.home-assistant.io/integrations/sensor/)) - total count of existing fines
 - Has Non-Served Tickets ([binary_sensor](https://www.home-assistant.io/integrations/binary_sensor/))
 - Has Tickets ([binary_sensor](https://www.home-assistant.io/integrations/binary_sensor/))
-- Total BGN Owed ([sensor, int](https://www.home-assistant.io/integrations/sensor/)) - the total sum that needs to be paid, which takes into account the active discounts for early payment
+- Total EUR Owed ([sensor, int](https://www.home-assistant.io/integrations/sensor/)) - the total sum that needs to be paid, which takes into account the active discounts for early payment
 
 ## Standalone Python library
 

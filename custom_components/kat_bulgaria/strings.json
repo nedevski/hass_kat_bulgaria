@@ -72,7 +72,7 @@
         "name": "Count Served"
       },
       "total_ticket_amount_owed": {
-        "name": "Total BGN Owed"
+        "name": "Total EUR Owed"
       },
       "total_ticket_count": {
         "name": "Count Total"
