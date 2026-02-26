@@ -1,5 +1,7 @@
 """Base class for KAТ Bulgaria entities."""
 
+from kat_bulgaria.data_models import PersonalIdentificationType
+
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -19,7 +21,17 @@ class KatBulgariaEntity(CoordinatorEntity[KatBulgariaUpdateCoordinator]):
 
         unique_id = coordinator.client.person_egn
 
-        if coordinator.client.person_type == PersonType.BUSINESS:
+        if (
+            coordinator.client.person_type == PersonType.INDIVIDUAL
+            and coordinator.client.person_identifier_type
+            == PersonalIdentificationType.CAR_PLATE_NUM
+        ):
+            unique_id = coordinator.client.person_identifier
+
+        if (
+            coordinator.client.person_type == PersonType.BUSINESS
+            and coordinator.client.bulstat
+        ):
             unique_id = coordinator.client.bulstat
 
         self._attr_unique_id: str = unique_id

@@ -3,13 +3,14 @@
     "abort": {
       "already_configured": "Човек с това ЕГН вече е конфигуриран.",
       "cannot_connect": "Сайта на КАТ е паднал, опитайте отново след малко.",
-      "invalid_config": "Невалидно ЕГН или номер на личен документ.",
+      "invalid_config": "Невалидно ЕГН или идентификационен номер.",
       "reconfigure_successful": "Успешна реконфигурация.",
       "unknown": "Неочаквана грешка."
     },
     "error": {
       "cannot_connect": "Неуспешно свързване",
-      "invalid_config": "Невалидно ЕГН или номер на личен документ.",
+      "invalid_config": "Невалидно ЕГН или идентификационен номер.",
+      "invalid_config_car_plate_number": "Невалиден номер на автомобил. Използвайте само главни букви на латиница, без интервали.",
       "unknown": "Неочаквана грешка."
     },
     "step": {
@@ -25,16 +26,16 @@
         "data": {
           "person_name": "Име",
           "egn": "ЕГН",
-          "document_number": "Номер на документ",
-          "document_type": "Вид документ"
+          "document_number": "Идентификационен номер",
+          "document_type": "Вид идентификация"
         }
       },
       "reconfigure": {
         "data": {
-          "document_number": "Номер на документ",
-          "document_type": "Вид документ"
+          "document_number": "Идентификационен номер",
+          "document_type": "Вид идентификация"
         },
-        "title": "Обновяване на документ"
+        "title": "Обновяване на идентификация"
       },
       "business": {
         "title": "Конфигурация - Юридическо лице",
@@ -83,7 +84,8 @@
     "document_type": {
       "options": {
         "national_id": "Лична карта",
-        "driving_license": "Шофьорска книжка"
+        "driving_license": "Шофьорска книжка",
+        "car_plate_num": "Номер на автомобил"
       }
     }
   }

@@ -84,7 +84,8 @@ class KatBulgariaUpdateCoordinator(DataUpdateCoordinator):
                     translation_key="invalid_config",
                 ) from error
 
-            _LOGGER.warning("KAT API down, unable to update: %s", error.error_type)
+            _LOGGER.warning(
+                "KAT API down, unable to update: %s", error.error_type)
             raise UpdateFailed(
                 translation_domain=DOMAIN,
                 translation_key="update_error",
