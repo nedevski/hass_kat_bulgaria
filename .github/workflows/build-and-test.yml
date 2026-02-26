@@ -6,7 +6,7 @@ on:
   pull_request:
   schedule:
     # 04:00 on the 1st and 15th. Using this to keep the sonar token alive.
-    - cron: "0 4 1,15 * *" 
+    - cron: "0 4 1 * *"
 
 name: Build and Test
 jobs:
