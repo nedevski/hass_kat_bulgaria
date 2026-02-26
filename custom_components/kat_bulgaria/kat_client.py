@@ -2,7 +2,6 @@
 
 import httpx
 from httpx import AsyncClient
-
 from kat_bulgaria.data_models import KatObligation
 from kat_bulgaria.kat_api_client import KatApiClient
 
