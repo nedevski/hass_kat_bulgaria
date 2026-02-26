@@ -4,6 +4,9 @@ on:
     branches:
       - main
   pull_request:
+  schedule:
+    # 04:00 on the 1st and 15th. Using this to keep the sonar token alive.
+    - cron: "0 4 1 * *"
 
 name: Build and Test
 jobs:
@@ -36,8 +39,10 @@ jobs:
           pytest --cov=./custom_components/kat_bulgaria --cov-report=xml
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5.1.0 # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
+        uses: SonarSource/sonarqube-scan-action@v6.0.0 # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           # SONAR_TOKEN: ${{ secrets.SELFHOSTED_SONAR_TOKEN }}
           # SONAR_HOST_URL: ${{ secrets.SELFHOSTED_SONAR_HOST_URL }}
+
+
