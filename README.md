@@ -26,9 +26,11 @@
 
 Интеграцията поддържа както физически, така и юридически лица.
 
-- За физически лица проверката се извършва по ЕГН + лична карта/шофьорска книжка/номер на автомобил
+- За физически лица проверката се извършва по ЕГН плюс едно от:
+  - Номер на лична карта
+  - Номер на шофьорска книжка
+  - Номер на автомобил във формат **A0000AA**, без интервали
 - За юридически лица са нужни ЕГН и лична карта на собственика, както и БУЛСТАТ на фирмата
-  За да настроите интеграцията, трябва да дадете име на човек, неговото ЕГН, както и номера на шофьорската му книжка.
 
 За всеки конфигуриран човек се създават няколко entities, които се обновяват на всеки 2 часа:
 
@@ -77,7 +79,10 @@ After restarting you add the integration as usual: Settings => Devices and servi
 
 The integrations supports checks for both individuals and businesses
 
-- For individuals you need a combination of EGN (Unified Civil Number) and Driving License Number/National ID Number/Car Plate Number
+- For individuals you need a combination of EGN (Unified Civil Number) and one of the following:
+  - National ID number
+  - Driving License Number
+  - Car Plate Number, formatted as **A0000AA**, no blank spaces
 - For businesses you need the EGN and National ID Number of the owner, as well as the BULSTAT of the company
 
 For each configured instance, a couple of entities are created and updated every 2 hours:
