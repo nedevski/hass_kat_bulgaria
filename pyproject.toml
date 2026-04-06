@@ -24,3 +24,4 @@ asyncio_mode = "auto"
 
 [tool.setuptools.packages.find]
 where = ["custom_components/kat_bulgaria"]
+
