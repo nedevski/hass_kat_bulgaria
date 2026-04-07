@@ -8,6 +8,10 @@ on:
     # 04:00 on the 1st and 15th. Using this to keep the sonar token alive.
     - cron: "0 4 1 * *"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 name: Build and Test
 jobs:
   build-and-test:
