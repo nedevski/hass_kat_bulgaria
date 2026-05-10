@@ -68,8 +68,7 @@ class KatClient:
 
             # Call the constructor in the executor to avoid blocking the loop
             self._httpx_client = await self.hass.async_add_executor_job(
-                httpx.AsyncClient,
-                transport=transport,
+                lambda: httpx.AsyncClient(transport=transport)
             )
 
         return self._httpx_client
