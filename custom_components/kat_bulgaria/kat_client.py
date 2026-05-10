@@ -64,9 +64,12 @@ class KatClient:
         """Return an HTTPX async client, creating it off the event loop."""
 
         if self._httpx_client is None:
+            transport = httpx.AsyncHTTPTransport(local_address="0.0.0.0")
+
             # Call the constructor in the executor to avoid blocking the loop
             self._httpx_client = await self.hass.async_add_executor_job(
-                httpx.AsyncClient
+                httpx.AsyncClient,
+                transport=transport,
             )
 
         return self._httpx_client
