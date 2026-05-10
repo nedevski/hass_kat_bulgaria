@@ -33,11 +33,12 @@ class KatClient:
         identifier_str: str,
         document_type: str | None,
         bulstat: str | None,
+        httpx_client: AsyncClient | None = None,
     ) -> None:
         """Initialize client."""
         super().__init__()
 
-        self._httpx_client = None
+        self._httpx_client = httpx_client
         self.hass = hass
         self.api = KatApiClient()
 
@@ -49,8 +50,7 @@ class KatClient:
 
         if self.person_type == PersonType.INDIVIDUAL:
             if document_type is None:
-                raise ValueError(
-                    "Document type is required for individual type")
+                raise ValueError("Document type is required for individual type")
 
             self.person_identifier_type = document_type
 
@@ -66,7 +66,9 @@ class KatClient:
         if self._httpx_client is None:
             # Call the constructor in the executor to avoid blocking the loop
             self._httpx_client = await self.hass.async_add_executor_job(
-                httpx.AsyncClient
+                lambda: httpx.AsyncClient(
+                    http2=False
+                )
             )
 
         return self._httpx_client

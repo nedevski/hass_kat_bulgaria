@@ -212,8 +212,7 @@ class ConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                 ),
                 vol.Required(
                     CONF_DOCUMENT_NUMBER,
-                    default=reconfigure_entry.data.get(
-                        CONF_DOCUMENT_NUMBER, ""),
+                    default=reconfigure_entry.data.get(CONF_DOCUMENT_NUMBER, ""),
                 ): str,
             }
         )
@@ -261,8 +260,7 @@ class ConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             {
                 vol.Required(
                     CONF_DOCUMENT_NUMBER,
-                    default=reconfigure_entry.data.get(
-                        CONF_DOCUMENT_NUMBER, ""),
+                    default=reconfigure_entry.data.get(CONF_DOCUMENT_NUMBER, ""),
                 ): str,
             }
         )
