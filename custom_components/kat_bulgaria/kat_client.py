@@ -1,11 +1,13 @@
 """KAT Bulgaria Client Wrapper."""
 
-import httpx
-from httpx import AsyncClient
+import socket
+
+import aiohttp
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
 from kat_bulgaria.data_models import KatObligation
 from kat_bulgaria.kat_api_client import KatApiClient
-
-from homeassistant.core import HomeAssistant
 
 from .const import PersonType
 
@@ -13,8 +15,7 @@ from .const import PersonType
 class KatClient:
     """KAT Client Manager."""
 
-    # Cached client created off the event loop
-    _httpx_client: AsyncClient | None
+    _aiohttp_session: aiohttp.ClientSession | None
 
     api: KatApiClient
     hass: HomeAssistant
@@ -33,12 +34,12 @@ class KatClient:
         identifier_str: str,
         document_type: str | None,
         bulstat: str | None,
-        httpx_client: AsyncClient | None = None,
+        aiohttp_session: aiohttp.ClientSession | None = None,
     ) -> None:
         """Initialize client."""
         super().__init__()
 
-        self._httpx_client = httpx_client
+        self._aiohttp_session = aiohttp_session
         self.hass = hass
         self.api = KatApiClient()
 
@@ -60,18 +61,16 @@ class KatClient:
 
             self.bulstat = bulstat
 
-    async def _get_httpx_client(self) -> AsyncClient:
-        """Return an HTTPX async client, creating it off the event loop."""
+    async def _get_aiohttp_session(self) -> aiohttp.ClientSession:
+        """Return an aiohttp client session managed by Home Assistant."""
 
-        if self._httpx_client is None:
-            # Call the constructor in the executor to avoid blocking the loop
-            self._httpx_client = await self.hass.async_add_executor_job(
-                lambda: httpx.AsyncClient(
-                    http2=False
-                )
+        if self._aiohttp_session is None:
+            self._aiohttp_session = async_get_clientsession(
+                self.hass,
+                family=socket.AF_INET,
             )
 
-        return self._httpx_client
+        return self._aiohttp_session
 
     async def validate_credentials(self) -> bool:
         """Validate EGN/License Number."""
@@ -86,7 +85,7 @@ class KatClient:
     async def get_obligations(self) -> list[KatObligation]:
         """Get obligations."""
 
-        client = await self._get_httpx_client()
+        client = await self._get_aiohttp_session()
 
         if self.person_type == PersonType.BUSINESS:
             return await self.api.get_obligations_business(
